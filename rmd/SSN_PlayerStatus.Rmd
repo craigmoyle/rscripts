@@ -1,0 +1,135 @@
+---
+title: "2020 Suncorp Super Netball Player Status"
+author: "Alice Sweeting <br>Research Fellow<br>Victoria University, Australia"
+date: "Updated on 14/10/2020"
+output: html_document
+---
+
+```{r global_options, R.options=knitr::opts_chunk$set(warning=FALSE, message=FALSE)}
+```
+
+```{r Setup block, include = FALSE}
+options(knitr.kable.NA = '')
+# Load required packages
+library(reactable)
+library(htmltools)
+library(readxl)
+library(forcats)
+library(gt)
+library(tidyverse)
+# Read in data
+SSN <- read_excel("SSN_Player_Status.xlsx", sheet = "2021 Contracted Players")
+# We don't want the bottom bit with row numbers etc, so remove
+SSN <- SSN[c(1:82), ]
+# Rename columns, to make it easier for table
+colnames(SSN) <- c("Athlete", "Club", "Status", "Notes")
+# Make factor
+SSN$Status <- as.factor(SSN$Status)
+# Renamed "Not re-signed" to "free-agent
+SSN$Status <- fct_explicit_na(SSN$Status, "Unknown")
+```
+
+
+### Data compiled here is with thanks to [Craig Moyle](https://twitter.com/Old_Rando) who has manually captured and input all records! {.tabset}
+
+#### Contracted Players in 2020
+```{r MakeReactiveTable, echo = FALSE}
+# Make reactable
+reactable(SSN, 
+          pagination = FALSE,
+          defaultSorted = "Club", 
+          showSortIcon = FALSE,
+          borderless = TRUE, 
+          highlight = TRUE,
+          searchable = FALSE,
+          defaultColDef = colDef(headerClass = "header", 
+                                 align = "center"),
+          columns = list(
+            Athlete = colDef(name = "Athlete",
+                          filterable = TRUE,
+                          align = "center", 
+                          style = list(fontSize = "18px"),
+                          headerStyle = list(fontWeight = 700),  
+                          maxWidth = 500),
+            Club = colDef(name = "Club",
+                          filterable = TRUE,
+                          align = "center", 
+                          style = list(fontSize = "12px", fontWeight = "bold"),
+                          headerStyle = list(fontWeight = 700),
+                          cell = function(value) {
+                            div(class = "Club",
+                                img(class = "logo", 
+                                    alt = paste(value, "logo"), 
+                                    src = sprintf("Images/%s.png", value)))
+                            }, 
+                          maxWidth = 100),
+            Notes = colDef(name = "Notes",
+                          filterable = FALSE,
+                          align = "center", 
+                          style = list(fontSize = "18px"),
+                          headerStyle = list(fontWeight = 700),  
+                          maxWidth = 500),
+            Status = colDef(cell = function(value) {
+    class <- paste0("tag status-", tolower(value))
+    htmltools::div(class = class, value) },
+    style = list(fontSize = "18px"),
+    filterable = TRUE,
+    maxWidth = 500)
+            )
+          )
+```
+
+
+#### Club Lists for 2021 SSN Season (to-date)
+```{r gtTable, echo = FALSE}
+# Read in data
+SSN_2021 <- read_excel("SSN_Player_Status.xlsx", sheet = "ClubLists2021")
+# Use gt
+table_html <- SSN_2021  %>%
+  gt() %>%
+  cols_label(
+    Fever = html("<img src=\"Images/Fever.png\" style=\"height:60px;\">"),
+    Firebirds = html("<img src=\"Images/Firebirds.png\" style=\"height:60px;\">"),
+    Giants = html("<img src=\"Images/Giants.png\" style=\"height:60px;\">"),
+    Lightning = html("<img src=\"Images/Lightning.png\" style=\"height:60px;\">"),
+    Magpies = html("<img src=\"Images/Magpies.png\" style=\"height:60px;\">"),
+    Swifts = html("<img src=\"Images/Swifts.png\" style=\"height:60px;\">"),
+    Thunderbirds = html("<img src=\"Images/Thunderbirds.png\" style=\"height:60px;\">"),
+    Vixens = html("<img src=\"Images/Vixens.png\" style=\"height:60px;\">")
+  )
+  table_html
+
+```
+
+
+```{css echo=FALSE}
+/* rmarkdown html documents */
+  
+.tag {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 15px;
+  font-weight: 600;
+  font-size: 12px;
+}
+.status-contracted {
+  background: hsl(116, 60%, 90%);
+  color: hsl(116, 30%, 25%);
+}
+.status-retired {
+  background: hsl(230, 70%, 90%);
+  color: hsl(230, 45%, 30%);
+}
+.status-uncontracted {
+  background: hsl(350, 70%, 90%);
+  color: hsl(350, 45%, 30%);
+}
+.status-unknown {
+  background: hsl(47, 100%, 50%);
+  color: hsl(350, 45%, 30%);
+}
+.status-departed {
+  background: hsl(360, 100%, 0%);
+  color: hsl(360, 100%, 100%);
+}
+```
