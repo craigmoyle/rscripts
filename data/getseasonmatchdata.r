@@ -2,13 +2,13 @@
 library(superNetballR)
 library(tidyverse)
 library(ggdark)
-# First, create an empty data.frame for the season
-# SSN_2020 <- FirebirdsVixens[0,]
+# Enter the season ID
 SeasonID = 11108
 # Set the number of rounds in the season
 numRounds = 14
+# Init the getRound counter
 getRound = 1
-
+# Create an empty data.frame for the season and round
 SSN_Round <- data.frame(Doubles=double(),
                            Ints=integer(),
                            Factors=factor(),
@@ -23,10 +23,8 @@ SSN_2020 <- data.frame(Doubles=double(),
                              stringsAsFactors=FALSE)
 # Loop for the number of rounds in the season
 while (getRound <= numRounds) {
-  # Run a loop to grab data for the round
+  # Run a loop to grab data for all the games in the round
   for (mm in 1:4) {
-    # First, create an empty data.frame for the round
-#    SSN_Round <- FirebirdsVixens[0,]
     # Download match
     matchData <- downloadMatch(SeasonID,getRound,mm)
     # Tidy data
@@ -34,8 +32,10 @@ while (getRound <= numRounds) {
     # Append
     SSN_Round <- rbind(tidy_match,SSN_Round)
   }
+  # Increment the counter
   getRound <- getRound + 1
+  # Append round data to the season
   SSN_2020 <- rbind(SSN_2020,SSN_Round)
 }
-# Inspect
+# Inspect the data
 tail(SSN_2020, 12)
