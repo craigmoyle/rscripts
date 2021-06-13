@@ -3,9 +3,9 @@ library(superNetballR)
 library(tidyverse)
 library(ggdark)
 # Enter the season ID
-SeasonID = 11108
+SeasonID = 11391
 # Set the number of rounds in the season
-numRounds = 14
+numRounds = 7
 # Init the getRound counter
 getRound = 1
 # Create an empty data.frame for the season and round
@@ -15,7 +15,7 @@ SSN_Round <- data.frame(Doubles=double(),
                            Logicals=logical(),
                            Characters=character(),
                            stringsAsFactors=FALSE)
-SSN_2020 <- data.frame(Doubles=double(),
+SSN_2021 <- data.frame(Doubles=double(),
                              Ints=integer(),
                              Factors=factor(),
                              Logicals=logical(),
@@ -35,7 +35,7 @@ while (getRound <= numRounds) {
   # Increment the counter
   getRound <- getRound + 1
   # Append round data to the season
-  SSN_2020 <- rbind(SSN_2020,SSN_Round)
+  SSN_2021 <- rbind(SSN_2021,SSN_Round)
 }
 # Inspect the data
-tail(SSN_2020, 12)
+tail(SSN_2021, 12)
