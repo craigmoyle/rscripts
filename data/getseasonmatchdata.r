@@ -5,7 +5,7 @@ library(ggdark)
 # Enter the season ID
 SeasonID = 11391
 # Set the number of rounds in the season
-numRounds = 7
+numRounds = 14
 # Init the getRound counter
 getRound = 1
 # Create an empty data.frame for the season and round
@@ -39,3 +39,7 @@ while (getRound <= numRounds) {
 }
 # Inspect the data
 tail(SSN_2021, 12)
+
+
+vixmatchData <- downloadMatch(11391,9,01)
+tidy_vix_match <- tidyMatch(vixmatchData)

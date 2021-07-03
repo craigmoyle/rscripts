@@ -9,14 +9,14 @@ SquadName_Colours <- c("#FDE725FF", "#73D055FF", "#27AD81FF",
 names(SquadName_Colours) <- c("Sunshine Coast Lightning", "West Coast Fever", "Melbourne Vixens", 
 "Queensland Firebirds", "Adelaide Thunderbirds", "NSW Swifts", "Collingwood Magpies", "GIANTS Netball")
 
-SS_Attempt_By_Round_2020 %>%
+SS_Attempt_By_Round_2021 %>%
     ggplot(aes(x=round, y=total, group=squadName, color=squadName)) +
     geom_line() + geom_point() +
     geom_text(aes(label = total), size = 4, colour = "black", check_overlap = TRUE) +
     scale_colour_manual(values = SquadName_Colours) + scale_fill_manual(values = SquadName_Colours) +
     scale_x_continuous(limits = c(1,14), breaks = c(1:14)) +
     scale_y_continuous(expand = c(0,0), limits = c(0, 26), breaks = seq(0,26, by = 2)) +
-    labs(x = NULL, y = "Number of Super Shots Made \n", title = "\n Super Netball 2020 \n Super Shots Attempts per Team By Round\n") +
+    labs(x = NULL, y = "Number of Super Shots Made \n", title = "\n Super Netball 2021 \n Super Shots Attempts per Team By Round\n") +
     dark_theme_gray() +
     theme(plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
         plot.background = element_rect(fill = "grey10"), panel.background = element_blank(),
