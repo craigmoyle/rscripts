@@ -5,22 +5,22 @@ library(ggdark)
 # Enter the season ID
 SeasonID = 11391
 # Set the number of rounds in the season
-numRounds = 14
+numRounds = 10
 # Init the getRound counter
-getRound = 1
-# Create an empty data.frame for the season and round
-SSN_Round <- data.frame(Doubles=double(),
-                           Ints=integer(),
-                           Factors=factor(),
-                           Logicals=logical(),
-                           Characters=character(),
-                           stringsAsFactors=FALSE)
-SSN_2021 <- data.frame(Doubles=double(),
+getRound = 9
+# Create an empty data.frame for the season
+ssn_matchdata_2021 <- data.frame(Doubles=double(),
                              Ints=integer(),
                              Factors=factor(),
                              Logicals=logical(),
                              Characters=character(),
                              stringsAsFactors=FALSE)
+ssn_playerdata_2021 <- data.frame(Doubles=double(),
+                             Ints=integer(),
+                             Factors=factor(),
+                             Logicals=logical(),
+                             Characters=character(),
+                             stringsAsFactors=FALSE)                             
 # Loop for the number of rounds in the season
 while (getRound <= numRounds) {
   # Run a loop to grab data for all the games in the round
@@ -29,17 +29,11 @@ while (getRound <= numRounds) {
     matchData <- downloadMatch(SeasonID,getRound,mm)
     # Tidy data
     tidy_match <- tidyMatch(matchData)
+    tidy_player <- tidyPlayers(matchData)
     # Append
-    SSN_Round <- rbind(tidy_match,SSN_Round)
+    ssn_matchdata_2021 <- rbind(tidy_match,ssn_matchdata_2021)
+    ssn_playerdata_2021 <- rbind(tidy_player,ssn_playerdata_2021)
   }
   # Increment the counter
   getRound <- getRound + 1
-  # Append round data to the season
-  SSN_2021 <- rbind(SSN_2021,SSN_Round)
 }
-# Inspect the data
-tail(SSN_2021, 12)
-
-
-vixmatchData <- downloadMatch(11391,9,01)
-tidy_vix_match <- tidyMatch(vixmatchData)

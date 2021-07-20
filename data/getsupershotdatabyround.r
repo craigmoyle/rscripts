@@ -2,25 +2,20 @@
 library(superNetballR)
 library(tidyverse)
 library(ggdark)
-# First, create an empty data.frame for the season
+
 # SSN_2020 <- FirebirdsVixens[0,]
 SeasonID = 11108
 # Set the number of rounds in the season
 numRounds = 14
 getRound = 1
 
-SS_Round <- data.frame(Doubles=double(),
+# Create two empty data.frames
+SS_By_Round <- data.frame(Doubles=double(),
                         Ints=integer(),
                         Factors=factor(),
                         Logicals=logical(),
                         Characters=character(),
                         stringsAsFactors=FALSE)
-SS_Attempt_By_Round_2020 <- data.frame(Doubles=double(),
-                                        Ints=integer(),
-                                        Factors=factor(),
-                                        Logicals=logical(),
-                                        Characters=character(),
-                                        stringsAsFactors=FALSE)
 # Loop for the number of rounds in the season
 while (getRound <= numRounds) {
     # Run a loop to grab data for the round
@@ -29,11 +24,60 @@ while (getRound <= numRounds) {
         matchData <- downloadMatch(SeasonID,getRound,mm)
         # Tidy data
         tidy_match <- tidyMatch(matchData)
-        supershot <- tidy_match %>% filter(stat=="attempt_from_zone2") %>% group_by(squadName) %>% summarise(total = sum(value),round) %>% distinct()
+        supershot <- tidy_match %>% filter(stat=="generalPlayTurnovers") %>% group_by(squadName) %>% summarise(total = sum(value),round) %>% distinct()
         supershot <- data.frame(supershot)
         # Append
-        SS_Round <- rbind(SS_Round,supershot)
+        SS_By_Round <- rbind(SS_By_Round,supershot)
     }
     getRound <- getRound + 1
-    SS_Attempt_By_Round_2020 <- rbind(SS_Attempt_By_Round_2020,SS_Round)
+}
+
+# Filter required data from season data
+turnovers_season  <- data.frame(Doubles=double(),
+                        Ints=integer(),
+                        Factors=factor(),
+                        Logicals=logical(),
+                        Characters=character(),
+                        stringsAsFactors=FALSE)
+numRounds = 10
+getRound = 1
+while (getRound <= numRounds) {	
+    turnovers <- SSN_2021 %>% filter(stat=="generalPlayTurnovers") %>% filter(round==getRound) %>% group_by(squadName) %>% summarise(total = sum(value),round) %>% distinct()
+    turnovers <- data.frame(turnovers)
+    turnovers_season <- rbind(turnovers_season,turnovers)
+    getRound <- getRound + 1
+}
+
+# Filter required data from season data
+turnovers_season  <- data.frame(Doubles=double(),
+                        Ints=integer(),
+                        Factors=factor(),
+                        Logicals=logical(),
+                        Characters=character(),
+                        stringsAsFactors=FALSE)
+numRounds = 10
+getRound = 1
+while (getRound <= numRounds) {	
+    turnovers <- ssn_matchdata_2021 %>% filter(stat=="generalPlayTurnovers") %>% filter(round==getRound) %>% group_by(round) %>% summarise(total = sum(value)) %>% distinct()
+    turnovers <- data.frame(turnovers)
+    turnovers_season <- rbind(turnovers_season,turnovers)
+    getRound <- getRound + 1
+}
+
+
+# Filter required data from season data - average
+turnovers_season_avg  <- data.frame(Doubles=double(),
+                        Ints=integer(),
+                        Factors=factor(),
+                        Logicals=logical(),
+                        Characters=character(),
+                        stringsAsFactors=FALSE)
+numRounds = 10
+getRound = 1
+while (getRound <= numRounds) {	
+    turnovers <- SSN_2021 %>% filter(stat=="generalPlayTurnovers") %>% filter(round<=getRound) %>% group_by(squadName) %>% summarise(total = sum(value)/getRound,round) %>% distinct()
+    turnovers <- turnovers %>% filter(round==getRound)
+    turnovers <- data.frame(turnovers)
+    turnovers_season_avg <- rbind(turnovers_season_avg,turnovers)
+    getRound <- getRound + 1
 }
