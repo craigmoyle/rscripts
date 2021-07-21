@@ -42,7 +42,7 @@ turnovers_season  <- data.frame(Doubles=double(),
 numRounds = 10
 getRound = 1
 while (getRound <= numRounds) {	
-    turnovers <- SSN_2021 %>% filter(stat=="generalPlayTurnovers") %>% filter(round==getRound) %>% group_by(squadName) %>% summarise(total = sum(value),round) %>% distinct()
+    turnovers <- ssn_matchdata_2021 %>% filter(stat=="generalPlayTurnovers") %>% filter(round==getRound) %>% group_by(squadName) %>% summarise(total = sum(value),round) %>% distinct()
     turnovers <- data.frame(turnovers)
     turnovers_season <- rbind(turnovers_season,turnovers)
     getRound <- getRound + 1
@@ -55,11 +55,12 @@ turnovers_season  <- data.frame(Doubles=double(),
                         Logicals=logical(),
                         Characters=character(),
                         stringsAsFactors=FALSE)
-numRounds = 10
+numRounds = 14
 getRound = 1
 while (getRound <= numRounds) {	
-    turnovers <- ssn_matchdata_2021 %>% filter(stat=="generalPlayTurnovers") %>% filter(round==getRound) %>% group_by(round) %>% summarise(total = sum(value)) %>% distinct()
+    turnovers <- ssn_matchdata_2017 %>% filter(stat=="turnovers") %>% filter(round==getRound) %>% group_by(round) %>% summarise(total = sum(value)) %>% distinct()
     turnovers <- data.frame(turnovers)
+    turnovers <- cbind(turnovers, year = 2017)
     turnovers_season <- rbind(turnovers_season,turnovers)
     getRound <- getRound + 1
 }
@@ -75,9 +76,44 @@ turnovers_season_avg  <- data.frame(Doubles=double(),
 numRounds = 10
 getRound = 1
 while (getRound <= numRounds) {	
-    turnovers <- SSN_2021 %>% filter(stat=="generalPlayTurnovers") %>% filter(round<=getRound) %>% group_by(squadName) %>% summarise(total = sum(value)/getRound,round) %>% distinct()
+    turnovers <- ssn_matchdata_2021 %>% filter(stat=="generalPlayTurnovers") %>% filter(round<=getRound) %>% group_by(squadName) %>% summarise(total = sum(value)/getRound,round) %>% distinct()
     turnovers <- turnovers %>% filter(round==getRound)
     turnovers <- data.frame(turnovers)
     turnovers_season_avg <- rbind(turnovers_season_avg,turnovers)
+    getRound <- getRound + 1
+}
+
+# Filter required data from season data - average
+unforcedturnovers_season_avg  <- data.frame(Doubles=double(),
+                        Ints=integer(),
+                        Factors=factor(),
+                        Logicals=logical(),
+                        Characters=character(),
+                        stringsAsFactors=FALSE)
+numRounds = 10
+getRound = 1
+while (getRound <= numRounds) {	
+    unforcedturnovers <- ssn_matchdata_2021 %>% filter(stat=="unforcedTurnovers") %>% filter(round<=getRound) %>% group_by(squadName) %>% summarise(total = sum(value)/getRound,round) %>% distinct()
+    unforcedturnovers <- unforcedturnovers %>% filter(round==getRound)
+    unforcedturnovers <- data.frame(unforcedturnovers)
+    unforcedturnovers_season_avg <- rbind(unforcedturnovers_season_avg,unforcedturnovers)
+    getRound <- getRound + 1
+}
+
+
+
+unforcedturnovers_season  <- data.frame(Doubles=double(),
+                        Ints=integer(),
+                        Factors=factor(),
+                        Logicals=logical(),
+                        Characters=character(),
+                        stringsAsFactors=FALSE)
+numRounds = 14
+getRound = 1
+while (getRound <= numRounds) {	
+    unforcedturnovers <- ssn_matchdata_2021 %>% filter(stat=="unforcedTurnovers") %>% filter(round==getRound) %>% group_by(round) %>% summarise(total = sum(value)) %>% distinct()
+    unforcedturnovers <- data.frame(unforcedturnovers)
+    unforcedturnovers <- cbind(unforcedturnovers, year = 2021)
+    unforcedturnovers_season <- rbind(unforcedturnovers_season,unforcedturnovers)
     getRound <- getRound + 1
 }

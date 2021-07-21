@@ -56,14 +56,14 @@ turnovers_season %>%
         axis.text.y = element_text(size = 10, face = "bold"), legend.title = element_blank(), legend.position = "bottom")
 
 
-turnovers_season_avg %>%
+unforcedturnovers_season_avg %>%
     ggplot(aes(x=round, y=total, group=squadName, color=squadName)) +
     geom_line() + geom_point() +
     geom_text(aes(label = total), size = 4, colour = "black", check_overlap = TRUE) +
     scale_colour_manual(values = SquadName_Colours) + scale_fill_manual(values = SquadName_Colours) +
     scale_x_continuous(limits = c(1,10), breaks = c(1:10)) +
-    scale_y_continuous(expand = c(0,0), limits = c(10, 30), breaks = seq(10,30, by = 2)) +
-    labs(x = NULL, y = "Number of General Play Turoners \n", title = "\n Super Netball 2021 \n Turonvers per Team By Round (Average)\n") +
+    scale_y_continuous(expand = c(0,0), limits = c(8, 24), breaks = seq(8,24, by = 1)) +
+    labs(x = NULL, y = "Number of Unforced Turoners \n", title = "\n Super Netball 2021 \n Turnovers per Team By Round (Average)\n") +
     dark_theme_gray() +
     theme(plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
         plot.background = element_rect(fill = "grey10"), panel.background = element_blank(),
