@@ -55,12 +55,12 @@ turnovers_season  <- data.frame(Doubles=double(),
                         Logicals=logical(),
                         Characters=character(),
                         stringsAsFactors=FALSE)
-numRounds = 14
+numRounds = 10
 getRound = 1
 while (getRound <= numRounds) {	
-    turnovers <- ssn_matchdata_2017 %>% filter(stat=="turnovers") %>% filter(round==getRound) %>% group_by(round) %>% summarise(total = sum(value)) %>% distinct()
+    turnovers <- ssn_matchdata_2021 %>% filter(stat=="generalPlayTurnovers") %>% filter(round==getRound) %>% group_by(round) %>% summarise(total = sum(value)) %>% distinct()
     turnovers <- data.frame(turnovers)
-    turnovers <- cbind(turnovers, year = 2017)
+    turnovers <- cbind(turnovers, year = 2021)
     turnovers_season <- rbind(turnovers_season,turnovers)
     getRound <- getRound + 1
 }

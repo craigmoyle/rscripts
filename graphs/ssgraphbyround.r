@@ -72,3 +72,8 @@ unforcedturnovers_season_avg %>%
         axis.line.x =  element_line(color = "grey30", size = 0.1), axis.text.x = element_text(size = 12, face = "bold"),
         axis.ticks.y =  element_line(color = "grey30", size = 0.1), axis.line.y =  element_line(color = "grey30", size = 0.1),
         axis.text.y = element_text(size = 10, face = "bold"), legend.title = element_blank(), legend.position = "bottom")
+
+
+turnovers_season %>%
+    ggplot(aes(x=round, y=total, group=year, color=year)) +
+    geom_line() + geom_point() + dark_theme_gray()
